@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import { createPinia } from 'pinia';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -33,11 +34,17 @@ import '@ionic/vue/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { useAuthStore } from './stores/auth';
 
 const app = createApp(App)
   .use(IonicVue)
+  .use(createPinia())
   .use(router);
 
-router.isReady().then(() => {
+router.isReady().then(async () => {
+
+  const auth = useAuthStore();
+  await auth.restoreSession();
+  
   app.mount('#app');
 });
